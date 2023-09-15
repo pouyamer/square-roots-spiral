@@ -4,11 +4,20 @@ const config = {
       height: innerHeight,
       width: innerWidth
     },
-    multiplier: 24
+    multiplier: 24,
+    backgroundColor: "wheat"
   },
-  toggleDrawLines: {
-    fromSpiralPointsToCenter: true,
-    betweenSpiralPoints: true
+  lines: {
+    fromSpiralPointsToCenter: {
+      lineWidth: 1,
+      toggleDraw: true,
+      color: "hsl(20,70%,25%)"
+    },
+    betweenSpiralPoints: {
+      lineWidth: 1,
+      toggleDraw: true,
+      color: "hsl(20,70%,60%)"
+    }
   },
   squareRootsSpiral: {
     pointsCount: 16,
