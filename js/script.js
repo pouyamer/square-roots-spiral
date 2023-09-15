@@ -5,11 +5,22 @@ const ctx = canvas.getContext("2d")
 const input = document.querySelector(".input")
 
 const {
-  fromSpiralPointsToCenter: drawLineFromSpiralPointsToCenter,
-  betweenSpiralPoints: drawLineBetweenSpiralPoints
-} = config.toggleDrawLines
+  toggleDraw: toggleDrawLineFromSpiralPointsToCenter,
+  color: lineFromSpiralPointsToCenterColor,
+  lineWidth: lineFromSpiralPointsToCenterLineWidth
+} = config.lines.fromSpiralPointsToCenter
 
-const { size: canvasSize, multiplier: canvasMultiplier } = config.canvas
+const {
+  toggleDraw: toggleDrawLineBetweenSpiralPoints,
+  color: lineBetweenSpiralPointsColor,
+  lineWidth: lineBetweenSpiralPointsLineWidth
+} = config.lines.betweenSpiralPoints
+
+const {
+  backgroundColor: canvasBackgroundColor,
+  size: canvasSize,
+  multiplier: canvasMultiplier
+} = config.canvas
 
 const { pointsCount, startPositive } = config.squareRootsSpiral
 canvas.width = canvasSize.width
@@ -63,7 +74,9 @@ const draw = iteration => {
   const numArray = [...Array(iteration)].map((_, i) => i)
 
   // connect each point to the center
-  drawLineFromSpiralPointsToCenter &&
+  ctx.strokeStyle = lineFromSpiralPointsToCenterColor
+  ctx.lineWidth = lineFromSpiralPointsToCenterLineWidth
+  toggleDrawLineFromSpiralPointsToCenter &&
     numArray.forEach(num => {
       const angle = determineAngle(num)
       const point = pointFromCenter(sqrt(num + 1), angle)
@@ -71,7 +84,9 @@ const draw = iteration => {
     })
 
   // connect each points to next one
-  drawLineBetweenSpiralPoints &&
+  ctx.strokeStyle = lineBetweenSpiralPointsColor
+  ctx.lineWidth = lineBetweenSpiralPointsLineWidth
+  toggleDrawLineBetweenSpiralPoints &&
     numArray.forEach((_, i) => {
       if (i === numArray.length - 1) return
       const point = pointFromCenter(sqrt(i + 1), determineAngle(i))
@@ -81,7 +96,8 @@ const draw = iteration => {
 }
 
 input.addEventListener("input", e => {
-  ctx.clearRect(0, 0, canvasSize.width, canvasSize.height)
+  ctx.fillStyle = canvasBackgroundColor
+  ctx.fillRect(0, 0, canvasSize.height, canvasSize.width)
   draw(parseInt(e.target.value))
 })
 
@@ -90,6 +106,8 @@ document.addEventListener("mousemove", () => {
 })
 
 // Initialize:
+ctx.fillStyle = canvasBackgroundColor
+ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
 input.value = pointsCount
 draw(parseInt(pointsCount))
 input.focus()
